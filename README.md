@@ -114,33 +114,33 @@ CabN is a comprehensive ride booking Android application that connects users wit
 
 <div align="center">
 
-| ![Login Page](screenshots/login.png) | ![OTP Validation](screenshots/otp.png) | ![Sign Up Form](screenshots/signup.png) |
-|:---:|:---:|:---:|
-| **Login Page - Email Entry & OTP Send** | **OTP Validation** | **Sign Up Form Validation** |
+| ![Login Page](screenshots/login.png) | 
+|:---:|
+| **Login Page - Email Entry & OTP Send  :: OTP Validation :: Sign Up Form Validation** |
 
 ---
 
-| ![Map and Route Selection](screenshots/map_select.png) | ![Vehicle Types and Prices](screenshots/vehicle_prices.png) | ![Confirm Ride Selection](screenshots/confirm_ride.png) |
-|:---:|:---:|:---:|
-| **Map and Route Selection** | **Display Vehicle Types and Prices** | **Confirm Ride Selection** |
+| ![Map and Route Selection](screenshots/map_select.png) |
+|:---:|
+| **Map and Route Selection :: Display Vehicle Types and Prices :: Confirm Ride Selection** |
 
 ---
 
-| ![Payment Method Selection](screenshots/payment.png) | ![Ride History](screenshots/ride_history.png) |
-|:---:|:---:|
-| **Payment Method Selection** | **Ride History - View Past** |
+| ![Payment Method Selection](screenshots/payment.png) | 
+|:---:|
+| **Payment Method Selection :: Ride History - View Past** |
 
 ---
 
-| ![Driver Login](screenshots/driver_login.png) | ![Driver Dashboard](screenshots/driver_dashboard.png) | ![New Ride Request](screenshots/ride_request.png) |
-|:---:|:---:|:---:|
-| **Driver Login with Valid Credentials** | **Driver Dashboard Overview** | **New Ride Request - Notification** |
+| ![Driver Login](screenshots/driver_login.png) | 
+|:---:|
+| **Driver Login with Valid Credentials :: Driver Dashboard Overview :: New Ride Request - Notification** |
 
 ---
 
-| ![Accept Ride](screenshots/accept_ride.png) | ![Ongoing Ride](screenshots/ongoing_ride.png) | ![Complete Ride](screenshots/complete_ride.png) |
-|:---:|:---:|:---:|
-| **Accepting a Ride Request** | **Ongoing Ride Interface** | **Completing a Ride** |
+| ![Accept Ride](screenshots/accept_ride.png) | 
+|:---:|
+| **Accepting a Ride Request :: Ongoing Ride Interface :: Completing a Ride** |
 
 ---
 
