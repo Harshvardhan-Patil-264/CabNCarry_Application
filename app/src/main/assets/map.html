@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display a Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+    <style>
+        body { margin: 0; padding: 0; text-align: center; font-family: Arial, sans-serif; }
+        #map { position: absolute; top: 80px; bottom: 50px; width: 100%; }
+        #controls {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        input {
+            width: 200px;
+            padding: 5px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        .suggestions-list {
+            position: absolute;
+            background: white;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            width: 200px;
+            border: 1px solid #ccc;
+            max-height: 150px;
+            overflow-y: auto;
+            display: none;
+        }
+        .suggestions-list li {
+            padding: 8px;
+            cursor: pointer;
+        }
+        .suggestions-list li:hover {
+            background: #f0f0f0;
+        }
+        #bookButton {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #bookButton:disabled {
+            background-color: gray;
+            cursor: not-allowed;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="controls">
+    <label> Choose Locations </label>
+    <input type="text" id="source" placeholder="From">
+    <ul id="source-suggestions" class="suggestions-list"></ul>
+
+    <input type="text" id="destination" placeholder="To">
+    <ul id="destination-suggestions" class="suggestions-list"></ul>
+</div>
+
+<div id="map"></div>
+
+<div id="loading" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;">
+    <div style="width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid blue; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+</div>
+
+<button id="bookButton" disabled>Find Route</button>
+
+<script>
+    const key = 'EmsgGtSr2aDNx6zMJqRP';
+
+    const map = L.map('map').setView([20.5937, 78.9629], 5); //India view
+    L.tileLayer(`https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=${key}`, {
+        tileSize: 512,
+        zoomOffset: -1,
+        minZoom: 4,
+        maxBounds: [[6, 68], [36, 97]],
+        attribution: '&copy; <a href="https://www.maptiler.com/copyright/" target="_blank">MapTiler</a> &copy; OpenStreetMap contributors',
+    }).addTo(map);
+
+
+    let startLat = null, startLng = null, startPlace = null;
+    let endLat = null, endLng = null, endPlace = null;
+    let routeControl = null;
+    let startMarker = null, endMarker = null;
+    const bookButton = document.getElementById("bookButton");
+
+    function updateRoute() {
+        if (!startLat || !endLat) return;
+
+        if (routeControl) {
+            map.removeControl(routeControl);
+        }
+
+        //loader start
+        document.getElementById('loading').style.display = "block";
+
+        routeControl = L.Routing.control({
+
+            waypoints: [L.latLng(startLat, startLng), L.latLng(endLat, endLng)],
+            createMarker: () => null,
+            show: false,
+            addWaypoints: false,
+            lineOptions: { styles: [{ color: 'blue', opacity: 0.7, weight: 5 }] }
+        }).on('routesfound', function (e) {
+            //loader end
+            document.getElementById('loading').style.display = "none";
+            let distanceKm = (e.routes[0].summary.totalDistance / 1000).toFixed(1);
+
+            if (window.AndroidInterface?.showDistance) {
+                window.AndroidInterface.showDistance(distanceKm);
+            }
+            if (window.AndroidInterface?.showLatLng) {
+                window.AndroidInterface.showLatLng(startLat, startLng, endLat, endLng);
+            }
+        }).addTo(map);
+
+        setTimeout(() => {
+            document.querySelectorAll(".leaflet-routing-container").forEach(el => el.style.display = "none");
+        }, 500);
+    }
+
+    function checkButtonStatus() {
+        bookButton.disabled = !(startLat && endLat);
+    }
+
+    function handleSelection(inputElement, suggestionBox, isSource) {
+        inputElement.addEventListener("input", async function () {
+            const query = inputElement.value.trim();
+            if (query.length < 3) {
+                suggestionBox.style.display = "none";
+                return;
+            }
+
+            const url = `https://api.maptiler.com/geocoding/${encodeURIComponent(query)}.json?key=${key}`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            suggestionBox.innerHTML = "";
+            if (data.features?.length) {
+                data.features.forEach(feature => {
+                    const li = document.createElement("li");
+                    li.textContent = feature.place_name;
+                    li.addEventListener("click", () => {
+                        inputElement.value = feature.place_name;
+                        const [lng, lat] = feature.geometry.coordinates;
+
+                        if (isSource) {
+                            startLat = lat;
+                            startLng = lng;
+                            startPlace = feature.place_name;
+                            if (startMarker) map.removeLayer(startMarker);
+                            startMarker = L.marker([startLat, startLng]).addTo(map);
+                        } else {
+                            endLat = lat;
+                            endLng = lng;
+                            endPlace = feature.place_name;
+                            if (endMarker) map.removeLayer(endMarker);
+                            endMarker = L.marker([endLat, endLng]).addTo(map);
+                        }
+
+                        map.setView([lat, lng], 10);
+                        checkButtonStatus();
+                        suggestionBox.style.display = "none";
+                    });
+                    suggestionBox.appendChild(li);
+                });
+                suggestionBox.style.display = "block";
+            } else {
+                suggestionBox.style.display = "none";
+            }
+        });
+
+        inputElement.addEventListener("input", function () {
+            if (!this.value.trim()) {
+                if (isSource) {
+                    startLat = startLng = startPlace = null;
+                    if (startMarker) map.removeLayer(startMarker);
+                } else {
+                    endLat = endLng = endPlace = null;
+                    if (endMarker) map.removeLayer(endMarker);
+                }
+
+                if (routeControl) {
+                    map.removeControl(routeControl);
+                    routeControl = null;
+                }
+                checkButtonStatus();
+            }
+        });
+
+        document.addEventListener("click", (e) => {
+            if (!inputElement.contains(e.target) && !suggestionBox.contains(e.target)) {
+                suggestionBox.style.display = "none";
+            }
+        });
+    }
+
+    handleSelection(document.getElementById("source"), document.getElementById("source-suggestions"), true);
+    handleSelection(document.getElementById("destination"), document.getElementById("destination-suggestions"), false);
+
+    bookButton.addEventListener("click", updateRoute);
+</script>
+
+</body>
+</html>

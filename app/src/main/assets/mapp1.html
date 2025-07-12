@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display a Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+    <style>
+        body { margin: 0; padding: 0; text-align: center; font-family: Arial, sans-serif; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<script>
+    const key = 'EmsgGtSr2aDNx6zMJqRP';
+
+    const map = L.map('map').setView([20.5937, 78.9629], 5);
+    L.tileLayer(`https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=${key}`, {
+        tileSize: 512,
+        zoomOffset: -1,
+        minZoom: 4,
+        maxBounds: [[6, 68], [36, 97]],
+        attribution: '&copy; <a href="https://www.maptiler.com/copyright/" target="_blank">MapTiler</a> &copy; OpenStreetMap contributors',
+    }).addTo(map);
+
+
+    let startMarker, endMarker;
+    let routeControl = null;
+
+    function setRoute(startLat, startLng, endLat, endLng) {
+        console.log(`Setting route: Start (${startLat}, ${startLng}) → End (${endLat}, ${endLng})`);
+
+        // Place Start Marker
+        if (startMarker) {
+            startMarker.setLatLng([startLat, startLng]).bindPopup("Start Location").openPopup();
+        } else {
+            startMarker = L.marker([startLat, startLng]).addTo(map).bindPopup("Start Location").openPopup();
+        }
+
+        // Place End Marker
+        if (endMarker) {
+            endMarker.setLatLng([endLat, endLng]).bindPopup("End Location").openPopup();
+        } else {
+            endMarker = L.marker([endLat, endLng]).addTo(map).bindPopup("End Location").openPopup();
+        }
+
+        // Remove previous route if exists
+        if (routeControl) {
+            map.removeControl(routeControl);
+        }
+
+        // Draw route using Leaflet Routing Machine
+        routeControl = L.Routing.control({
+            waypoints: [L.latLng(startLat, startLng), L.latLng(endLat, endLng)],
+            createMarker: () => null,
+            show: false,
+            addWaypoints: false,
+            lineOptions: { styles: [{ color: 'blue', opacity: 0.7, weight: 5 }] }
+        }).addTo(map);
+
+        setTimeout(() => {
+            document.querySelectorAll(".leaflet-routing-container").forEach(el => el.style.display = "none");
+        }, 500);
+
+
+        map.setView([startLat, startLng], 10);
+    }
+
+</script>
+</body>
+</html>

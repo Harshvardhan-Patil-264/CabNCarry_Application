@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#2a6de0"
+    android:orientation="vertical">
+
+    <!-- Include the Toolbar -->
+    <include layout="@layout/toolbar"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="24dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/backbtn"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Welcome Back"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:textSize="32sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:padding="5dp"
+                    android:text="Sign in to continue"
+                    android:textColor="#E0E0E0"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:text="Login As"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif-medium"/>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="#FFFFFF">
+
+                    <RadioGroup
+                        android:id="@+id/userrrtypppp"
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_height="56dp"
+                        android:padding="8dp">
+
+                        <RadioButton
+                            android:id="@+id/usr"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="User"
+                            android:checked="true"
+                            android:textSize="16sp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:textColor="#2a6de0"
+                            android:buttonTint="#2a6de0"/>
+
+                        <RadioButton
+                            android:id="@+id/drvr"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="Driver"
+                            android:layout_weight="1"
+                            android:textSize="16sp"
+                            android:gravity="center"
+                            android:textColor="#2a6de0"
+                            android:buttonTint="#2a6de0"/>
+
+                    </RadioGroup>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="Email Address"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-medium"/>
+
+            </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/phone_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/backbtn"
+                android:layout_marginTop="8dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="#FFFFFF">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <EditText
+                        android:id="@+id/emaill"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Enter your email"
+                        android:inputType="textEmailAddress"
+                        android:textColor="#2a6de0"
+                        android:textColorHint="#AAAAAA"
+                        android:textSize="16sp"
+                        android:padding="12dp"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/send_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:text="Send"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        app:cornerRadius="8dp"
+                        app:backgroundTint="#2a6de0"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/opt_layout"
+                android:layout_width="353dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/phone_layout"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="8dp"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center_vertical"
+                        android:padding="12dp"
+                        android:text="OTP"
+                        android:textColor="#2a6de0"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/otp_input"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Enter OTP"
+                        android:inputType="number"
+                        android:padding="12dp"
+                        android:textColor="#2a6de0"
+                        android:textColorHint="#AAAAAA"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/resend_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="12dp"
+                        android:text="Resend"
+                        android:textColor="#2a6de0"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/next_btn"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="24dp"
+                android:layout_below="@+id/opt_layout"
+                android:text="Sign In"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                app:cornerRadius="12dp"
+                app:backgroundTint="#2a6de0"
+                app:elevation="4dp"/>
+
+            <TextView
+                android:id="@+id/register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/next_btn"
+                android:text="Don't have an account? Sign Up"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:layout_marginTop="16dp"
+                android:layout_centerHorizontal="true"/>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</LinearLayout>
